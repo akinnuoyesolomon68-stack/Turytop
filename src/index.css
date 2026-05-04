@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Poppins", sans-serif;
+  
+  --color-primary: #1E40AF; /* Deeper Blue for Professionalism */
+  --color-primary-light: #3B82F6;
+  --color-primary-dark: #1E3A8A;
+  --color-secondary: #64748B;
+  --color-bg-light: #F8FAFC;
+  --color-bg-pure: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-success: #10B981;
+  --color-danger: #EF4444;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-pure text-slate-900 font-sans antialiased overflow-x-hidden;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-bg-light;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
+}
+
+/* Glass Effect */
+.glass-nav {
+  @apply bg-white/90 backdrop-blur-md border-b border-border sticky top-0 z-50;
+}
+
+/* Card Styling */
+.card-base {
+  @apply bg-white rounded-2xl border border-border shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden;
+}
+
+.input-field {
+  @apply w-full px-4 py-3 rounded-xl border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white;
+}
+
+.btn-primary {
+  @apply px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 bg-white text-primary rounded-xl font-semibold border-2 border-primary hover:bg-primary/5 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer;
+}
+
+.section-padding {
+  @apply py-16 md:py-24;
+}
+
+@media print {
+  body {
+    @apply bg-white;
+  }
+  nav, footer, .whatsapp-button, .portal-search-area, .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-break-inside-avoid {
+    break-inside: avoid;
+  }
+  .result-card-print {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .section-padding {
+    padding: 0 !important;
+  }
+}

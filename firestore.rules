@@ -1,0 +1,139 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 3. Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == 'akinnuoyesolomon68@gmail.com' && request.auth.token.email_verified == true
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 2. Entity Validations
+    function isValidAdmission(data) {
+      return data.keys().hasAll(['fullName', 'dob', 'parentContact', 'email', 'classSeeking', 'status', 'paid', 'createdAt']) &&
+             data.fullName is string && data.fullName.size() <= 200 &&
+             data.dob is string && data.dob.size() <= 20 &&
+             data.parentContact is string && data.parentContact.size() <= 20 &&
+             data.email is string && data.email.size() <= 200 &&
+             data.classSeeking is string && data.classSeeking.size() <= 50 &&
+             data.status in ['pending', 'reviewed', 'accepted', 'rejected'] &&
+             data.paid is bool &&
+             data.createdAt is number;
+    }
+
+    function isValidResult(data) {
+      return data.keys().hasAll(['studentId', 'studentName', 'academicYear', 'term', 'subjects', 'createdAt']) &&
+             data.studentId is string && data.studentId.size() <= 50 &&
+             data.studentName is string && data.studentName.size() <= 200 &&
+             data.academicYear is string && data.academicYear.size() <= 20 &&
+             data.term is string && data.term.size() <= 20 &&
+             data.subjects is list && data.subjects.size() > 0 &&
+             data.createdAt is number;
+    }
+
+    function isValidStudent(data) {
+      return data.keys().hasAll(['studentId', 'name', 'class', 'createdAt']) &&
+             data.studentId is string && data.studentId.size() <= 50 &&
+             data.name is string && data.name.size() <= 200 &&
+             data.class is string && data.class.size() <= 50 &&
+             data.createdAt is number;
+    }
+
+    function isValidPayment(data) {
+      return data.keys().hasAll(['studentId', 'studentName', 'amount', 'status', 'createdAt', 'reference']) &&
+             data.studentId is string &&
+             data.studentName is string &&
+             data.amount is number &&
+             data.status == 'PAID' &&
+             data.createdAt is number &&
+             data.reference is string;
+    }
+
+    // --- COLLECTIONS ---
+
+    match /admins/{adminId} {
+      allow read: if isSignedIn() && (request.auth.uid == adminId || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    match /admissions/{admissionId} {
+      allow create: if isValidAdmission(incoming()) && 
+                       incoming().status == 'reviewed' &&
+                       incoming().paid == true &&
+                       incoming().createdAt == request.time.toMillis();
+      
+      allow get: if true; 
+      allow list: if isAdmin();
+      
+      allow update: if isAdmin() && isValidAdmission(incoming()) && (
+        // Action: Review status
+        incoming().diff(existing()).affectedKeys().hasOnly(['status', 'studentId', 'updatedAt']) ||
+        // Action: General edit
+        incoming().diff(existing()).affectedKeys().hasOnly(['fullName', 'classSeeking', 'status', 'updatedAt'])
+      );
+      
+      allow delete: if isAdmin();
+    }
+
+    match /results/{resultId} {
+      allow get: if true;
+      allow list: if isAdmin();
+      
+      allow create: if isAdmin() && isValidResult(incoming()) &&
+                       incoming().createdAt == request.time.toMillis();
+      
+      allow update: if isAdmin() && isValidResult(incoming()) &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['subjects', 'updatedAt']) &&
+                       incoming().studentId == existing().studentId;
+                       
+      allow delete: if isAdmin();
+    }
+
+    match /students/{studentId} {
+      allow get: if true;
+      allow list: if isAdmin();
+      
+      allow create: if isAdmin() && isValidStudent(incoming()) &&
+                       incoming().createdAt == request.time.toMillis();
+                       
+      allow update: if isAdmin() && isValidStudent(incoming()) &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['class', 'name']) &&
+                       incoming().studentId == existing().studentId;
+                       
+      allow delete: if isAdmin();
+    }
+
+    match /payments/{paymentId} {
+      allow create: if isValidPayment(incoming()) && 
+                       incoming().createdAt == request.time.toMillis();
+      allow read, update, delete: if isAdmin();
+    }
+    
+    match /test/{docId} {
+      allow read: if true; // For connection test
+    }
+  }
+}

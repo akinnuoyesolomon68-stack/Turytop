@@ -1,0 +1,112 @@
+{
+  "entities": {
+    "Admission": {
+      "title": "Admission Application",
+      "description": "An application submitted by a prospective student.",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "description": "Full name of the student" },
+        "dob": { "type": "string", "description": "Date of birth in YYYY-MM-DD format" },
+        "parentContact": { "type": "string", "description": "Parent or guardian contact number" },
+        "email": { "type": "string", "description": "Contact email address" },
+        "classSeeking": { "type": "string", "description": "Class the student is applying for" },
+        "testScore": { "type": "number", "description": "Score achieved in the entrance assessment" },
+        "testAnswers": { "type": "object", "description": "Map of question IDs to selected options" },
+        "status": { "type": "string", "enum": ["pending", "reviewed", "accepted", "rejected"], "description": "Current status of the application" },
+        "paid": { "type": "boolean", "description": "Whether the application fee has been paid" },
+        "paymentRef": { "type": "string", "description": "Transaction reference for the payment" },
+        "studentId": { "type": "string", "description": "Generated Student ID (only if status is accepted)" },
+        "createdAt": { "type": "number", "description": "Server timestamp of creation" },
+        "updatedAt": { "type": "number", "description": "Server timestamp of last modification" }
+      },
+      "required": ["fullName", "dob", "parentContact", "email", "classSeeking", "status", "paid", "createdAt"]
+    },
+    "Result": {
+      "title": "Academic Result",
+      "description": "A report sheet for a student for a specific session and term.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "description": "Student registration number" },
+        "studentName": { "type": "string", "description": "Full name of the student" },
+        "academicYear": { "type": "string", "description": "Academic session (e.g., 2024/2025)" },
+        "term": { "type": "string", "description": "Academic term (First Term, etc.)" },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "score": { "type": "number" },
+              "grade": { "type": "string" }
+            }
+          },
+          "description": "List of subjects with scores and grades"
+        },
+        "createdAt": { "type": "number", "description": "Server timestamp of creation" },
+        "updatedAt": { "type": "number", "description": "Server timestamp of last modification" }
+      },
+      "required": ["studentId", "studentName", "academicYear", "term", "subjects", "createdAt"]
+    },
+    "Student": {
+      "title": "Student Profile",
+      "description": "Information about a currently enrolled student.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "description": "Unique registration number" },
+        "name": { "type": "string", "description": "Full name of the student" },
+        "class": { "type": "string", "description": "Current class level" },
+        "createdAt": { "type": "number", "description": "Server timestamp of registration" }
+      },
+      "required": ["studentId", "name", "class", "createdAt"]
+    },
+    "Admin": {
+      "title": "Administrator Profile",
+      "description": "Authorized admin users.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["superadmin", "admin"] },
+        "lastLogin": { "type": "number" },
+        "displayName": { "type": "string" }
+      },
+      "required": ["email", "role"]
+    },
+    "Payment": {
+      "title": "Fee Payment",
+      "description": "Record of a school fee payment.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "reference": { "type": "string" }
+      },
+      "required": ["studentId", "studentName", "amount", "status", "createdAt", "reference"]
+    }
+  },
+  "firestore": {
+    "admissions": {
+      "schema": "Admission",
+      "description": "Collection of admission applications"
+    },
+    "results": {
+      "schema": "Result",
+      "description": "Collection of student academic report sheets"
+    },
+    "students": {
+      "schema": "Student",
+      "description": "Collection of registered students"
+    },
+    "admins": {
+      "schema": "Admin",
+      "description": "Collection of authorized administrators"
+    },
+    "payments": {
+      "schema": "Payment",
+      "description": "Collection of fee payment records"
+    }
+  }
+}
