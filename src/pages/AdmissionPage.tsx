@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { CheckCircle2, AlertCircle, Loader2, Send, CreditCard, ShieldCheck } from 'lucide-react';
+import { QUESTION_POOL } from '../constants/quiz';
 
 const AdmissionPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -19,22 +20,13 @@ const AdmissionPage: React.FC = () => {
   const [score, setScore] = useState<number | null>(null);
   const [appId, setAppId] = useState('');
   const [activeQuestions, setActiveQuestions] = useState<any[]>([]);
-  const [paymentPhase, setPaymentPhase] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paid, setPaid] = useState(false);
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await fetch('/api/admission/questions');
-        const data = await response.json();
-        setActiveQuestions(data);
-      } catch (err) {
-        console.error("Error fetching questions:", err);
-        setError("Failed to load assessment questions. Please refresh the page.");
-      }
-    };
-    fetchQuestions();
+    // Select 5 random questions client-side
+    const shuffled = [...QUESTION_POOL].sort(() => 0.5 - Math.random());
+    setActiveQuestions(shuffled.slice(0, 5));
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,21 +35,14 @@ const AdmissionPage: React.FC = () => {
     setError(null);
 
     try {
-      // Calculate score securely on server
-      const scoreResponse = await fetch('/api/admission/calculate-score', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          answers: testAnswers,
-          questionIds: activeQuestions.map(q => q.id)
-        })
+      // Calculate score securely client-side (now suitable for static site)
+      let correctCount = 0;
+      activeQuestions.forEach((q) => {
+        if (testAnswers[q.id] === q.correct) {
+          correctCount++;
+        }
       });
-
-      if (!scoreResponse.ok) {
-        throw new Error('Failed to calculate score');
-      }
-
-      const { score: calculatedScore } = await scoreResponse.json();
+      const calculatedScore = (correctCount / activeQuestions.length) * 100;
       setScore(calculatedScore);
 
       // Determine status: all applications now go to 'reviewed' for admin decision

@@ -48,26 +48,19 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="overflow-hidden">
-      {/* Announcement Banner */}
-      <div className="bg-primary text-white py-2 text-center text-xs font-bold uppercase tracking-[0.2em] relative z-[60]">
-        <motion.div
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          Resumption Date for Next Term: Monday, 12th May 2026
-        </motion.div>
-      </div>
-
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center pt-10 overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-slate-900">
-          <img 
-            src="https://i.ibb.co/p6hWY8V5/national-cancer-institute-N-aihp118p8-unsplash.jpg" 
+          <motion.img 
+            initial={{ scale: 1.05 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 15, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+            src="https://i.ibb.co/0RMDbfjr/me2.jpg" 
             alt="School Exterior" 
-            className="w-full h-full object-cover opacity-40 select-none pointer-events-none"
+            className="w-full h-full object-cover opacity-90 select-none pointer-events-none"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/70 to-transparent" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -101,21 +94,24 @@ const LandingPage: React.FC = () => {
             transition={{ duration: 1 }}
             className="relative hidden lg:block"
           >
-            <div className="absolute inset-0 bg-primary/10 rounded-3xl -rotate-6 scale-105 blur-xl" />
-            <img 
-              src="https://images.unsplash.com/photo-1546410531-bc438a441d1d?q=80&w=2070&auto=format&fit=crop" 
+            <div className="absolute inset-0 bg-primary/10 rounded-3xl -rotate-6 scale-110 blur-2xl" />
+            <motion.img 
+              whileHover={{ scale: 1.05, rotate: -2 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              src="https://i.ibb.co/Xx4ZzY5g/me.jpg" 
               alt="Students in classroom" 
-              className="rounded-3xl shadow-2xl relative z-10 border-4 border-white"
+              className="rounded-[3rem] shadow-2xl relative z-10 border-4 border-white w-full object-cover aspect-[4/5]"
+              referrerPolicy="no-referrer"
             />
             {/* Floating Stats */}
-            <div className="absolute -bottom-10 -left-10 bg-white p-6 rounded-2xl shadow-xl z-20 border border-border animate-bounce-slow">
+            <div className="absolute -bottom-10 -left-10 bg-white p-6 rounded-3xl shadow-2xl z-20 border border-border animate-bounce-slow">
               <div className="flex items-center gap-4">
-                <div className="bg-yellow-400 p-3 rounded-xl">
-                  <Award className="text-white" />
+                <div className="bg-yellow-400 p-4 rounded-2xl">
+                  <Award className="text-white" size={32} />
                 </div>
                 <div>
-                  <div className="text-2xl font-black text-primary">100%</div>
-                  <div className="text-xs font-bold text-slate-500 uppercase">Success Rate</div>
+                  <div className="text-3xl font-black text-primary">100%</div>
+                  <div className="text-xs font-bold text-slate-500 uppercase tracking-tighter">Success Rate</div>
                 </div>
               </div>
             </div>
@@ -202,16 +198,19 @@ const LandingPage: React.FC = () => {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="relative"
+              className="relative group"
             >
-              <img 
-                src="https://images.unsplash.com/photo-1523050335392-9bf5675f42e8?q=80&w=2070&auto=format&fit=crop" 
+              <div className="absolute inset-0 bg-blue-500/20 rounded-[3rem] blur-3xl group-hover:scale-110 transition-transform duration-700" />
+              <motion.img 
+                whileHover={{ scale: 1.02, rotate: 1 }}
+                src="https://i.ibb.co/0RMDbfjr/me2.jpg" 
                 alt="School building/Environment" 
-                className="rounded-[2.5rem] shadow-2xl skew-y-1 hover:skew-y-0 transition-transform duration-500"
+                className="rounded-[3rem] shadow-2xl relative z-10 border-4 border-white w-full object-cover aspect-video transition-all duration-500"
+                referrerPolicy="no-referrer"
               />
-              <div className="absolute -top-6 -right-6 bg-blue-600 text-white p-8 rounded-3xl shadow-xl">
-                <div className="text-4xl font-black italic">Leading</div>
-                <div className="text-sm font-bold uppercase tracking-widest opacity-80">the way in Ondo State</div>
+              <div className="absolute -top-6 -right-6 bg-blue-600 text-white p-10 rounded-[2.5rem] shadow-2xl z-20 transform hover:scale-105 transition-transform">
+                <div className="text-5xl font-black italic mb-1">Leading</div>
+                <div className="text-sm font-bold uppercase tracking-widest opacity-90">the way in Ondo State</div>
               </div>
             </motion.div>
           </div>
