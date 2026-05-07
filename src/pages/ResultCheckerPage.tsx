@@ -9,7 +9,7 @@ import { jsPDF } from 'jspdf';
 
 const ResultCheckerPage: React.FC = () => {
   const [studentId, setStudentId] = useState('');
-  const [academicYear, setAcademicYear] = useState('2024/2025');
+  const [academicYear, setAcademicYear] = useState('2025/2026');
   const [results, setResults] = useState<StudentResult[]>([]);
   const [admissionStatus, setAdmissionStatus] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -19,10 +19,11 @@ const ResultCheckerPage: React.FC = () => {
   const [searchType, setSearchType] = useState<'academic' | 'admission'>('academic');
 
   const ACADEMIC_YEARS = [
+    '2026/2027',
+    '2025/2026',
     '2024/2025',
     '2023/2024',
     '2022/2023',
-    '2021/2022',
   ];
 
   const handleDownloadPDF = async (elementId: string, fileName: string) => {

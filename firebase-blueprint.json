@@ -28,7 +28,7 @@
       "properties": {
         "studentId": { "type": "string", "description": "Student registration number" },
         "studentName": { "type": "string", "description": "Full name of the student" },
-        "academicYear": { "type": "string", "description": "Academic session (e.g., 2024/2025)" },
+        "academicYear": { "type": "string", "description": "Academic session (e.g., 2025/2026)" },
         "term": { "type": "string", "description": "Academic term (First Term, etc.)" },
         "subjects": {
           "type": "array",

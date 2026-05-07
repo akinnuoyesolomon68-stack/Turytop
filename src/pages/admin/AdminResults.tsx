@@ -27,9 +27,9 @@ const AdminResults: React.FC = () => {
   // Form State
   const [studentId, setStudentId] = useState('');
   const [studentName, setStudentName] = useState('');
-  const [academicYear, setAcademicYear] = useState('2024/2025');
+  const [academicYear, setAcademicYear] = useState('2025/2026');
   const [term, setTerm] = useState('First Term');
-  const [filterYear, setFilterYear] = useState('2024/2025');
+  const [filterYear, setFilterYear] = useState('2025/2026');
   const [subjects, setSubjects] = useState<SubjectResult[]>([
     { name: '', score: 0, grade: '' }
   ]);
@@ -330,9 +330,10 @@ const AdminResults: React.FC = () => {
                         value={academicYear}
                         onChange={(e) => setAcademicYear(e.target.value)}
                       >
-                        <option value="2023/2024">2023/2024</option>
-                        <option value="2024/2025">2024/2025</option>
+                        <option value="2026/2027">2026/2027</option>
                         <option value="2025/2026">2025/2026</option>
+                        <option value="2024/2025">2024/2025</option>
+                        <option value="2023/2024">2023/2024</option>
                       </select>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -480,9 +481,10 @@ const AdminResults: React.FC = () => {
                     value={academicYear}
                     onChange={(e) => setAcademicYear(e.target.value)}
                   >
-                    <option value="2023/2024">2023/2024</option>
-                    <option value="2024/2025">2024/2025</option>
+                    <option value="2026/2027">2026/2027</option>
                     <option value="2025/2026">2025/2026</option>
+                    <option value="2024/2025">2024/2025</option>
+                    <option value="2023/2024">2023/2024</option>
                   </select>
                 </div>
                 <div className="space-y-2">
@@ -601,9 +603,10 @@ const AdminResults: React.FC = () => {
                       value={filterYear}
                       onChange={(e) => setFilterYear(e.target.value)}
                     >
-                      <option value="2023/2024">2023/2024</option>
-                      <option value="2024/2025">2024/2025</option>
+                      <option value="2026/2027">2026/2027</option>
                       <option value="2025/2026">2025/2026</option>
+                      <option value="2024/2025">2024/2025</option>
+                      <option value="2023/2024">2023/2024</option>
                     </select>
                   </div>
                 </div>
